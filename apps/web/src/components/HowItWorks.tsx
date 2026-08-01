@@ -63,7 +63,7 @@ export default function HowItWorks() {
           pinSpacing: true,
           anticipatePin: 1,
           refreshPriority: -1,
-          scrub: 1,
+          scrub: true,
           invalidateOnRefresh: true,
           end: () => `+=${scrollWrapperRef.current?.scrollWidth || 0}`,
         }
