@@ -226,7 +226,7 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row gap-4 h-auto md:h-125">
             {/* AI Review */}
             <div 
-              className={`glass-card relative overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer group ${expandedCard === 'ai' ? 'md:w-3/4 grow' : 'md:w-1/4 shrink-0 hover:bg-white/5'}`}
+              className={`glass-card relative overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-target cursor-pointer group ${expandedCard === 'ai' ? 'md:w-3/4 grow' : 'md:w-1/4 shrink-0 hover:bg-white/5'}`}
               onClick={() => setExpandedCard('ai')}
             >
               <div className="absolute inset-0 bg-linear-to-br from-brand-500/5 to-brand-400/5 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -262,7 +262,7 @@ export default function LandingPage() {
 
             {/* Community Review */}
             <div 
-              className={`glass-card relative overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer group ${expandedCard === 'community' ? 'md:w-3/4 grow' : 'md:w-1/4 shrink-0 hover:bg-white/5'}`}
+              className={`glass-card relative overflow-hidden transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-target cursor-pointer group ${expandedCard === 'community' ? 'md:w-3/4 grow' : 'md:w-1/4 shrink-0 hover:bg-white/5'}`}
               onClick={() => setExpandedCard('community')}
             >
               <div className="absolute inset-0 bg-linear-to-br from-brand-400/5 to-brand-300/5 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -598,9 +598,9 @@ export default function LandingPage() {
               </p>
               <div className="flex items-center gap-3 mt-5">
                 {[
-                  { label: 'GitHub', path: 'M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.66-.22.66-.48v-1.69c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85.004 1.71.114 2.51.334 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.16.58.67.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z' },
+                  { label: 'GitHub', href: 'https://github.com/ythStevin0', path: 'M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.66-.22.66-.48v-1.69c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85.004 1.71.114 2.51.334 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.16.58.67.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z' },
                 ].map((s) => (
-                  <a key={s.label} href="#" aria-label={s.label} className="cursor-target w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-brand-400 hover:border-brand-500/50 transition-all duration-300">
+                  <a key={s.label} href={s.href || "#"} target={s.href ? "_blank" : undefined} rel={s.href ? "noopener noreferrer" : undefined} aria-label={s.label} className="cursor-target w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-brand-400 hover:border-brand-500/50 transition-all duration-300">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d={s.path} /></svg>
                   </a>
                 ))}
@@ -643,9 +643,10 @@ export default function LandingPage() {
 
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-white/40">© 2025 DesignLens AI. Platform Evaluasi UI/UX Website.</p>
-            <p className="text-sm text-white/40 flex items-center gap-1.5">
-              Built with <span className="text-red-500">❤️</span> by DesignLens Team
-            </p>
+            <div className="flex items-center gap-6">
+              <Link href="/privacy" className="cursor-target text-sm text-white/40 hover:text-white/80 transition-colors">Kebijakan Privasi</Link>
+              <Link href="/terms" className="cursor-target text-sm text-white/40 hover:text-white/80 transition-colors">Syarat & Ketentuan</Link>
+            </div>
           </div>
         </div>
         
