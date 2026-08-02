@@ -5,11 +5,11 @@ DesignLens merupakan platform yang membantu pemilik website memperoleh masukan t
 
 Platform menyediakan dua jenis evaluasi yang berjalan secara terpisah:
 
-🤖 AI Review
+AI Review
 
 AI akan menganalisis tampilan website berdasarkan prinsip dasar UI/UX, seperti tata letak (layout), tipografi, warna, navigasi, dan Call-to-Action (CTA). Hasil analisis hanya dapat dilihat oleh pemilik website sebagai bahan evaluasi pribadi.
 
-👥 Community Review
+Community Review
 
 Pengguna dapat mempublikasikan website ke halaman komunitas agar memperoleh masukan dari pengguna lain atau reviewer. Community memberikan komentar, saran, dan berdiskusi mengenai desain website tanpa mengetahui hasil analisis AI, sehingga setiap tanggapan bersifat independen dan objektif.
 
@@ -24,7 +24,7 @@ Konsep Utama
 
 Platform ini tidak bertujuan menggantikan peran UI/UX Designer, melainkan menjadi media yang mempermudah proses memperoleh feedback terhadap sebuah website. AI digunakan untuk memberikan evaluasi awal secara cepat, sedangkan Community Review menjadi ruang diskusi yang memungkinkan pengguna mendapatkan perspektif manusia secara langsung.
 
-## 🚀 Panduan Instalasi & Kontribusi (Untuk Tim/Developer Baru)
+## Panduan Instalasi & Kontribusi (Untuk Tim/Developer Baru)
 
 Jika teman Anda ingin bergabung dan menjalankan project ini secara lokal (termasuk setup database) tanpa kendala, ikuti langkah-langkah berikut:
 
