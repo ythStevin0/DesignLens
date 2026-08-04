@@ -1,5 +1,6 @@
 .scroll-float {
   overflow: hidden;
+  display: inline-block;
 }
 
 .scroll-float-text {

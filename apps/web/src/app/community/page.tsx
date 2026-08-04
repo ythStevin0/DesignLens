@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { api } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 
@@ -11,6 +11,50 @@ export default function CommunityPage() {
   const [feed, setFeed] = useState<any>({ data: [], meta: { total: 0, page: 1, totalPages: 1 } });
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+
+  // Search and Filter State
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [filterMode, setFilterMode] = useState('Terbaru'); // 'Terbaru', 'Skor Tertinggi', 'Postingan Saya'
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    if (isSearchActive && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchActive]);
+
+  const filteredFeed = (feed?.data || []).filter((post: any) => {
+    const q = searchQuery.toLowerCase();
+    const title = post.website?.title?.toLowerCase() || '';
+    const url = post.website?.url?.toLowerCase() || '';
+    const author = post.website?.user?.name?.toLowerCase() || '';
+    const matchesSearch = title.includes(q) || url.includes(q) || author.includes(q);
+    
+    if (filterMode === 'Postingan Saya') {
+      return matchesSearch && post.website?.user?.id === user?.id;
+    }
+    return matchesSearch;
+  }).sort((a: any, b: any) => {
+    if (filterMode === 'Skor Tertinggi') {
+      const scoreA = a.website?.scores?.[0]?.overallScore || 0;
+      const scoreB = b.website?.scores?.[0]?.overallScore || 0;
+      return scoreB - scoreA;
+    }
+    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  });
 
   const loadFeed = useCallback(async () => {
     setLoading(true);
@@ -95,22 +139,76 @@ export default function CommunityPage() {
         <div className="max-w-5xl mx-auto px-6">
 
         {/* Mobile App Style Header */}
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-xl font-bold text-white tracking-wide">{user?.name || 'Community'}</h2>
-          <div className="flex items-center gap-5 text-white">
-            <button data-cursor-target="true" className="cursor-target hover:text-white/70 transition-colors">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <div className="flex items-center justify-between mb-8 relative">
+          {isSearchActive ? (
+            <div className="flex-1 flex items-center bg-white/10 rounded-full px-4 py-2 border border-[#8A2BE1]/50 shadow-[0_0_15px_rgba(138,43,225,0.3)] mr-4">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#8A2BE1] shrink-0 mr-2">
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
-            </button>
-            <button data-cursor-target="true" className="cursor-target hover:text-white/70 transition-colors">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="1" fill="currentColor" />
-                <circle cx="19" cy="12" r="1" fill="currentColor" />
-                <circle cx="5" cy="12" r="1" fill="currentColor" />
-              </svg>
-            </button>
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Cari website atau user..."
+                className="bg-transparent border-none outline-none text-white w-full placeholder:text-white/40 text-sm"
+              />
+              <button onClick={() => { setIsSearchActive(false); setSearchQuery(''); }} className="text-white/50 hover:text-white ml-2 shrink-0">
+                ✕
+              </button>
+            </div>
+          ) : (
+            <h2 className="text-xl font-bold text-white tracking-wide">{user?.name || 'Community'}</h2>
+          )}
+
+          <div className="flex items-center gap-5 text-white shrink-0">
+            {!isSearchActive && (
+              <button 
+                onClick={() => setIsSearchActive(true)}
+                data-cursor-target="true" 
+                className="cursor-target hover:text-white/70 transition-colors"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </button>
+            )}
+            
+            <div className="relative" ref={dropdownRef}>
+              <button 
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                data-cursor-target="true" 
+                className="cursor-target hover:text-white/70 transition-colors"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="1" fill="currentColor" />
+                  <circle cx="19" cy="12" r="1" fill="currentColor" />
+                  <circle cx="5" cy="12" r="1" fill="currentColor" />
+                </svg>
+              </button>
+              
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-3 w-48 bg-[#0A0A0A]/90 backdrop-blur-xl border border-white/10 rounded-xl shadow-xl overflow-hidden z-30 flex flex-col py-2">
+                  {['Terbaru', 'Skor Tertinggi', 'Postingan Saya'].map(option => (
+                    <button
+                      key={option}
+                      className={`text-left px-4 py-2 text-sm transition-colors ${filterMode === option ? 'text-[#8A2BE1] font-bold bg-white/5' : 'text-white/70 hover:text-white hover:bg-white/5'}`}
+                      onClick={() => {
+                        setFilterMode(option);
+                        setIsDropdownOpen(false);
+                      }}
+                    >
+                      {option === 'Terbaru' && '🕒 '}
+                      {option === 'Skor Tertinggi' && '⭐️ '}
+                      {option === 'Postingan Saya' && '👤 '}
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -126,7 +224,9 @@ export default function CommunityPage() {
           </div>
         ) : (
           <div className="flex flex-col rounded-3xl border border-border overflow-hidden bg-surface-100/20 backdrop-blur-md">
-            {feed.data.map((post: any, index: number) => (
+            {filteredFeed.length === 0 ? (
+              <div className="p-8 text-center text-white/50">Tidak ada hasil yang cocok.</div>
+            ) : filteredFeed.map((post: any, index: number) => (
               <Link
                 key={post.id}
                 href={`/community/${post.id}`}

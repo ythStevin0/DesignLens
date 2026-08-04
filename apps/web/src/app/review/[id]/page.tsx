@@ -131,7 +131,7 @@ export default function ReviewPage({ params }: { params: Promise<{ id: string }>
   return (
     <div className="min-h-screen text-[#F9F9FD] bg-[#0A0A0A] pt-6 relative">
       {/* Background layer */}
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#8A2BE1]/10 via-[#0A0A0A] to-[#0A0A0A]" />
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,var(--tw-gradient-stops))] from-[#8A2BE1]/10 via-[#0A0A0A] to-[#0A0A0A]" />
 
       <nav className="sticky top-0 z-50 transition-all duration-500 mb-8 w-[95%] max-w-6xl mx-auto">
         <div className="mx-auto px-6 py-3.5 rounded-2xl backdrop-blur-2xl border border-white/10 bg-[#0A0A0A]/60 shadow-2xl shadow-black/50 flex items-center">

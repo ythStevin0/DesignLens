@@ -56,19 +56,12 @@ const ScrollFloat = ({
           scaleY: 1,
           scaleX: 1,
           stagger: stagger,
-          scrollTrigger: {
-            trigger: el,
-            scroller,
-            start: scrollStart,
-            end: scrollEnd,
-            scrub: true
-          }
         }
       );
     }, el);
 
     return () => ctx.revert();
-  }, [scrollContainerRef, animationDuration, ease, scrollStart, scrollEnd, stagger]);
+  }, [animationDuration, ease, stagger]);
 
   return (
     <span ref={containerRef} className={`scroll-float ${containerClassName}`}>
