@@ -10,7 +10,7 @@ export default function HeroScrollAnimation() {
   const imageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setMounted(true), 0);
+    const timeout = setTimeout(() => setMounted(true), 100);
     return () => clearTimeout(timeout);
   }, []);
 

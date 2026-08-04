@@ -26,7 +26,22 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     gsap.ticker.add(tickerCallback);
     gsap.ticker.lagSmoothing(0);
 
+    // Handle anchor links
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest('a');
+      if (!anchor) return;
+      
+      const href = anchor.getAttribute('href');
+      if (href && href.startsWith('#') && href.length > 1) {
+        e.preventDefault();
+        lenis.scrollTo(href, { offset: -80 }); // Offset for sticky navbar
+      }
+    };
+    document.addEventListener('click', handleAnchorClick);
+
     return () => {
+      document.removeEventListener('click', handleAnchorClick);
       gsap.ticker.remove(tickerCallback);
       lenis.destroy();
     };
